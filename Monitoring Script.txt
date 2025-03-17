@@ -1,0 +1,21 @@
+import psutil #fetching system process details
+import time
+
+# Set threshold values
+CPU_THRESHOLD = 85.0 
+MEMORY_THRESHOLD = 85.0
+
+
+def monitor_processes():
+    print("Monitoring processes... Press Ctrl+C to stop.")
+    
+    while True:
+        for proc in psutil.process_iter(attrs=['pid', 'name', 'cpu_percent', 'memory_percent']):
+            info = proc.info
+            if info['cpu_percent'] > CPU_THRESHOLD or info['memory_percent'] > MEMORY_THRESHOLD:
+                print(f"[ALERT] High usage - PID: {info['pid']}, Name: {info['name']}, CPU: {info['cpu_percent']}%, Memory: {info['memory_percent']}%")
+        
+        time.sleep(5)  # Check every 5 seconds
+
+if __name__ == "__main__":
+    monitor_processes()
